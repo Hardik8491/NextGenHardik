@@ -97,7 +97,7 @@ export default function Contact({contact}:{contact:any}) {
   }
 
   return (
-    <section ref={containerRef} className="relative py-20 bg-gradient-to-b from-background to-background/50 overflow-hidden">
+    <section id='contact'  ref={containerRef} className="relative py-20 bg-gradient-to-b from-background to-background/50 overflow-hidden">
       <div className="container mx-auto max-w-7xl px-4">
         <motion.div
           style={{ opacity, scale }}

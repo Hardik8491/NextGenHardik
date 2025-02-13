@@ -44,7 +44,9 @@ const socialLinks = [
 export default function HeroSection({ pageInfo,socials}: Props) {
  
   const [isDownloading, setIsDownloading] = useState(false)
-  const [fileUrl, setFileUrl] = useState('https://drive.google.com/file/d/1NyNkPdhOi407wElyMWM18fG6TYOzvTkk/view?usp=sharing');
+  //const [fileUrl, setFileUrl] = useState('https://drive.google.com/file/d/1Lr-BiH7L9YQaMB_CI0eI-zXMgyv6xxXk/view?usp=sharing');
+  const fileUrl = "https://drive.google.com/uc?export=download&id=1Lr-BiH7L9YQaMB_CI0eI-zXMgyv6xxXk";
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [cursorVariant, setCursorVariant] = useState('default')
   const [isHovering, setIsHovering] = useState(false)
@@ -95,23 +97,40 @@ export default function HeroSection({ pageInfo,socials}: Props) {
 
 
   const handleDownload = async () => {
-    if (fileUrl) {
+    if (pageInfo?.resumeUrl) {
       setIsDownloading(true);
       try {
-        const response = await fetch(fileUrl);
+        const response = await fetch(pageInfo.resumeUrl);
+        if (!response.ok) throw new Error('Failed to fetch resume');
         const blob = await response.blob();
         const downloadUrl = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.download = 'resume.pdf'; // or any name you want to use
+        link.download = 'resume.pdf';
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+        toast({
+          title: "Resume downloaded successfully",
+          description: "Check your downloads folder.",
+        });
       } catch (error) {
-        console.log("Failed to download resume.");
+        console.error("Failed to download resume:", error);
+        toast({
+          title: "Download failed",
+          description: "Please try again later or contact for support.",
+          variant: "destructive",
+        });
       } finally {
         setIsDownloading(false);
       }
     } else {
-      console.log("Resume file not available.");
+      toast({
+        title: "Resume not available",
+        description: "The resume file is currently not available.",
+        variant: "destructive",
+      });
     }
   };
   
@@ -194,6 +213,7 @@ export default function HeroSection({ pageInfo,socials}: Props) {
           initial={{ opacity: 0, y: 20 }}
           animate={controls}
         >
+           <Link href="#contact">
           <Button 
             size="lg" 
             className="w-full sm:w-auto text-lg font-semibold relative overflow-hidden group"
@@ -214,12 +234,14 @@ export default function HeroSection({ pageInfo,socials}: Props) {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             />
           </Button>
+         </Link>
+          <a href={fileUrl} download>
           <Button 
             size="lg" 
             variant="outline" 
             className="w-full sm:w-auto text-lg font-semibold relative overflow-hidden group"
-            onClick={handleDownload}
-            disabled={isDownloading}
+
+            // disabled={isDownloading || !pageInfo?.resumeUrl}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
@@ -257,6 +279,7 @@ export default function HeroSection({ pageInfo,socials}: Props) {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             />
           </Button>
+          </a>
         </motion.div>
       </motion.div>
 
@@ -391,3 +414,4 @@ export default function HeroSection({ pageInfo,socials}: Props) {
     </section>
   )
 }
+
