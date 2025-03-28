@@ -42,6 +42,7 @@ import {
     ArrowUp,
 } from "lucide-react";
 import LoadingPage from "./loading";
+import Link from "next/link";
 
 const navItems = [
     { id: "hero", label: "Home", icon: Home },
@@ -66,7 +67,6 @@ export default function EnhancedPortfolioLayout() {
     const [projects, setProjects] = useState<any | null>(null);
     const [contact, setContact] = useState<any | null>(null);
     const [isNavOpen, setIsNavOpen] = useState(false);
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     const { theme, setTheme } = useTheme();
@@ -144,14 +144,7 @@ export default function EnhancedPortfolioLayout() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
-
-        window.addEventListener("mousemove", handleMouseMove);
-        return () => window.removeEventListener("mousemove", handleMouseMove);
-    }, []);
+  
 
     const scrollToSection = (sectionId: string) => {
         const section = document.getElementById(sectionId);
@@ -189,72 +182,11 @@ export default function EnhancedPortfolioLayout() {
 
             <TooltipProvider>
                 <nav className='fixed left-4 top-1/2 transform -translate-y-1/2 z-50 md:block hidden'>
-                    <motion.div
-                        className='flex flex-col items-center space-y-4 bg-background/80 border border-input/50 backdrop-blur-sm rounded-full py-4 px-2 shadow-lg'
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <AnimatePresence>
-                            {navItems.map((item) => (
-                                <motion.div
-                                    key={item.id}
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    exit={{ scale: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                >
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <Button
-                                                variant='ghost'
-                                                size='icon'
-                                                onClick={() =>
-                                                    scrollToSection(item.id)
-                                                }
-                                                className={cn(
-                                                    "rounded-full transition-all duration-300",
-                                                    activeSection === item.id
-                                                        ? "bg-primary text-primary-foreground shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]"
-                                                        : "hover:bg-primary/10 hover:shadow-[0_0_5px_rgba(var(--primary-rgb),0.2)]"
-                                                )}
-                                                aria-label={item.label}
-                                            >
-                                                <item.icon className='h-5 w-5' />
-                                            </Button>
-                                        </TooltipTrigger>
-                                        <TooltipContent side='right'>
-                                            <p>{item.label}</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    variant='ghost'
-                                    size='icon'
-                                    onClick={toggleTheme}
-                                    className='rounded-full transition-all duration-300 hover:bg-primary/10 hover:shadow-[0_0_5px_rgba(var(--primary-rgb),0.2)]'
-                                    aria-label='Toggle theme'
-                                >
-                                    {theme === "dark" ? (
-                                        <Sun className='h-5 w-5' />
-                                    ) : (
-                                        <Moon className='h-5 w-5' />
-                                    )}
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side='right'>
-                                <p>Toggle theme</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </motion.div>
+                    <FloatingNav />
                 </nav>
 
                 {/* Mobile navigation is now handled by FloatingNav */}
-                <FloatingNav />
+                {/* <FloatingNav /> */}
 
                 {/* Scroll to top button */}
                 <AnimatePresence>
@@ -324,7 +256,7 @@ export default function EnhancedPortfolioLayout() {
                 <motion.div
                     className='fixed inset-0 pointer-events-none'
                     animate={{
-                        background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(var(--primary-rgb), 0.1) 0%, rgba(var(--primary-rgb), 0) 20%)`,
+                        background: `rgba(var(--primary-rgb), 0.1) 0%, rgba(var(--primary-rgb), 0) 20%)`,
                     }}
                     transition={{ type: "spring", damping: 10, stiffness: 50 }}
                 />
@@ -336,7 +268,7 @@ export default function EnhancedPortfolioLayout() {
                     <section id='about' className='min-h-screen snap-start'>
                         <AboutPage pageInfo={pageInfo} />
                     </section>
-                    <section
+                     <section
                         id='experience'
                         className='min-h-screen snap-start'
                     >
@@ -366,33 +298,10 @@ export default function EnhancedPortfolioLayout() {
                         &copy; {new Date().getFullYear()} {pageInfo?.name}. All
                         rights reserved.
                     </p>
-                    <div className='flex justify-center space-x-4 mt-4'>
-                        {socials &&
-                            socials.map((social: any, index: number) => (
-                                <motion.a
-                                    key={social._id}
-                                    href={social.url}
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    className='text-muted-foreground hover:text-primary transition-colors duration-300'
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    {social.title}
-                                </motion.a>
-                            ))}
-                    </div>
                 </div>
             </footer>
 
-            <motion.div
-                className='fixed top-0 left-0 w-6 h-6 rounded-full bg-primary/50 pointer-events-none z-50 mix-blend-screen'
-                animate={{
-                    x: mousePosition.x - 12,
-                    y: mousePosition.y - 12,
-                }}
-                transition={{ type: "spring", damping: 10, stiffness: 50 }}
-            />
+
         </div>
     );
 }

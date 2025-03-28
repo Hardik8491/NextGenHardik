@@ -29,8 +29,7 @@ type Props = {
 
 
 const SkillItem = ({ data }: { data: Skill }) => {
-  console.log(data);
-  
+\
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
