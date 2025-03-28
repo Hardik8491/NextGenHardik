@@ -58,9 +58,8 @@ export const metadata: Metadata = {
             "Aspiring Software Engineer currently pursuing B.E with a passion for AI, machine learning, and full-stack development. Experienced in developing AI-powered applications, enhancing network management operations, and creating scalable web solutions. Proficient in React, Node.js, and natural language processing. Notable projects include BuyerEdge, SocialPeida, and StudySync.",
         images: "/hdk.png",
         url: "https://hardik-dev.tech",
-        site_name: "Hardik Bhammar Portfolio",
+        siteName: "Hardik Bhammar Portfolio",
         type: "website",
-        image_alt: "Hardik Bhammar Portfolio Preview",
     },
     twitter: {
         card: "summary_large_image",
