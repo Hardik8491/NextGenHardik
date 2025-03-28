@@ -67,6 +67,7 @@ export default function EnhancedPortfolioLayout() {
     const [projects, setProjects] = useState<any | null>(null);
     const [contact, setContact] = useState<any | null>(null);
     const [isNavOpen, setIsNavOpen] = useState(false);
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     const { theme, setTheme } = useTheme();
@@ -144,7 +145,14 @@ export default function EnhancedPortfolioLayout() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-  
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            setMousePosition({ x: e.clientX, y: e.clientY });
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
 
     const scrollToSection = (sectionId: string) => {
         const section = document.getElementById(sectionId);
@@ -256,7 +264,7 @@ export default function EnhancedPortfolioLayout() {
                 <motion.div
                     className='fixed inset-0 pointer-events-none'
                     animate={{
-                        background: `rgba(var(--primary-rgb), 0.1) 0%, rgba(var(--primary-rgb), 0) 20%)`,
+                        background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(var(--primary-rgb), 0.1) 0%, rgba(var(--primary-rgb), 0) 20%)`,
                     }}
                     transition={{ type: "spring", damping: 10, stiffness: 50 }}
                 />
@@ -268,7 +276,7 @@ export default function EnhancedPortfolioLayout() {
                     <section id='about' className='min-h-screen snap-start'>
                         <AboutPage pageInfo={pageInfo} />
                     </section>
-                     <section
+                    <section
                         id='experience'
                         className='min-h-screen snap-start'
                     >
@@ -298,10 +306,18 @@ export default function EnhancedPortfolioLayout() {
                         &copy; {new Date().getFullYear()} {pageInfo?.name}. All
                         rights reserved.
                     </p>
+                  
                 </div>
             </footer>
 
-
+            <motion.div
+                className='fixed top-0 left-0 w-6 h-6 rounded-full bg-primary/50 pointer-events-none z-50 mix-blend-screen'
+                animate={{
+                    x: mousePosition.x - 12,
+                    y: mousePosition.y - 12,
+                }}
+                transition={{ type: "spring", damping: 10, stiffness: 50 }}
+            />
         </div>
     );
 }

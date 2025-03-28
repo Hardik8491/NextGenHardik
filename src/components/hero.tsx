@@ -38,10 +38,13 @@ interface HeroProps {
 }
 
 export default function HeroSection({ pageInfo, socials }: HeroProps) {
+   
     const ref = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-
-
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [cursorText, setCursorText] = useState("");
+    const [cursorVariant, setCursorVariant] = useState("default");
+    const [shouldShowCustomCursor, setShouldShowCustomCursor] = useState(false);
     const [loadedSections, setLoadedSections] = useState(0);
 
     const { scrollYProgress } = useScroll({
@@ -57,7 +60,7 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
     );
     const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
     const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
-
+    const textY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
     useEffect(() => {
         const animationTimeline = setTimeout(() => {
@@ -67,9 +70,44 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
         return () => clearTimeout(animationTimeline);
     }, [loadedSections]);
 
-  
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            const { clientX, clientY } = e;
+            const container = containerRef.current;
 
+            if (container) {
+                const rect = container.getBoundingClientRect();
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
 
+                // Only activate custom cursor when inside the container
+                if (
+                    clientX > rect.left &&
+                    clientX < rect.right &&
+                    clientY > rect.top &&
+                    clientY < rect.bottom
+                ) {
+                    setShouldShowCustomCursor(true);
+                    setMousePosition({ x, y });
+                } else {
+                    setShouldShowCustomCursor(false);
+                }
+            }
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        return () => window.removeEventListener("mousemove", handleMouseMove);
+    }, []);
+
+    const handleMouseOver = (text: string) => {
+        setCursorText(text);
+        setCursorVariant("text");
+    };
+
+    const handleMouseLeave = () => {
+        setCursorText("");
+        setCursorVariant("default");
+    };
 
     const handleDownload = () => {
         // Google Drive file ID (replace with your actual file ID)
@@ -92,7 +130,21 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
         // Remove the link from the document
         document.body.removeChild(link);
     };
-
+    // Cursor variants
+    const cursorVariants = {
+        default: {
+            x: mousePosition.x - 16,
+            y: mousePosition.y - 16,
+            height: 40,
+            width: 40,
+        },
+        text: {
+            x: mousePosition.x - 75,
+            y: mousePosition.y - 75,
+            height: 150,
+            width: 150,
+        },
+    };
 
     // Stagger delay for social icons
     const socialVariants = {
@@ -121,7 +173,7 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
                 ref={containerRef}
             >
                 {/* Mouse follower cursor effect (only visible on desktop) */}
-                {/* <AnimatePresence mode='wait'>
+                <AnimatePresence mode='wait'>
                     {shouldShowCustomCursor && (
                         <motion.div
                             className='fixed hidden md:flex items-center justify-center pointer-events-none z-50 rounded-full bg-gradient-to-r from-primary/30 to-secondary/30 backdrop-blur-sm border border-white/10'
@@ -147,7 +199,7 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
                             )}
                         </motion.div>
                     )}
-                </AnimatePresence> */}
+                </AnimatePresence>
 
                 <div className='flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16 w-full'>
                     {/* Left content - Profile image */}
@@ -162,8 +214,8 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
                     >
                         <div
                             className='relative w-60 h-60 md:w-80 md:h-80 mx-auto'
-                            // onMouseEnter={() => handleMouseOver("View Profile")}
-                            // onMouseLeave={handleMouseLeave}
+                            onMouseEnter={() => handleMouseOver("View Profile")}
+                            onMouseLeave={handleMouseLeave}
                         >
                             <motion.div className='absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-tertiary rotate-0 animate-rotate-shine opacity-70' />
                             <motion.div
@@ -309,7 +361,10 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
                                         .getElementById("contact")
                                         ?.scrollIntoView({ behavior: "smooth" })
                                 }
-                              
+                                onMouseEnter={() =>
+                                    handleMouseOver("Contact Me")
+                                }
+                                onMouseLeave={handleMouseLeave}
                             >
                                 <Mail className='mr-2 h-4 w-4 group-hover:animate-pulse' />
                                 Contact Me
@@ -321,7 +376,10 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
                                 className='group relative overflow-hidden rounded-full border border-primary/20 hover:border-primary hover:shadow-glow transition-all duration-300'
                                 size='lg'
                                 onClick={handleDownload}
-                              
+                                onMouseEnter={() =>
+                                    handleMouseOver("Download Resume")
+                                }
+                                onMouseLeave={handleMouseLeave}
                             >
                                 <Download className='mr-2 h-4 w-4 group-hover:translate-y-1 transition-transform duration-300' />
                                 Download CV
@@ -353,7 +411,12 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
                                         target='_blank'
                                         rel='noopener noreferrer'
                                         className='inline-block'
-                                      
+                                        onMouseEnter={() =>
+                                            handleMouseOver(
+                                                `Visit ${social.title}`
+                                            )
+                                        }
+                                        onMouseLeave={handleMouseLeave}
                                     >
                                         <Button
                                             variant='outline'
@@ -401,7 +464,8 @@ export default function HeroSection({ pageInfo, socials }: HeroProps) {
                                 .getElementById("about")
                                 ?.scrollIntoView({ behavior: "smooth" })
                         }
-                    
+                        onMouseEnter={() => handleMouseOver("Scroll Down")}
+                        onMouseLeave={handleMouseLeave}
                     >
                         <ChevronDown className='h-6 w-6 text-primary' />
                     </Button>
