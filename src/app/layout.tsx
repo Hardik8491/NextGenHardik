@@ -67,7 +67,7 @@ export const metadata: Metadata = {
         description:
             "Aspiring Software Engineer with a passion for AI, ML, and Full-Stack Development. Check out my portfolio!",
         images: ["/hdk.png"],
-        site: "@your_twitter_handle", // Replace with your Twitter username
+        site: "@hardik8491", // Replace with your Twitter username
     },
     alternates: {
         canonical: "https://hardik-dev.tech",

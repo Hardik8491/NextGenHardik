@@ -153,7 +153,13 @@ export default function Contact({ contact }: { contact: any }) {
 
         // Simulate API call
         try {
-            await new Promise((resolve) => setTimeout(resolve, 1500));
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+              });
+          
+              const result = await response.json();
 
             // Success state
             setIsSuccess(true);
