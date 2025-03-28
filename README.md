@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hardik Bhammar - Portfolio
 
-## Getting Started
+![Portfolio Preview](https://your-image-host.com/portfolio-preview.png)
 
-First, run the development server:
+Welcome to my personal portfolio! 🚀 This website showcases my skills, projects, and achievements as an aspiring software engineer. Built with **Next.js**, it provides a seamless user experience across all devices.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌐 Live Demo
+[**Visit my portfolio**](https://www.hardik-dev.tech/)
+
+## 📱 Responsive Design
+This website is fully responsive and adapts to all screen sizes:
+- ✅ **Laptop View**
+- ✅ **Tablet View**
+- ✅ **Mobile View**
+
+## 🛠️ Tech Stack
+- **Frontend**: Next.js, React, Tailwind CSS
+- **Hosting**: Vercel
+- **SEO**: Google Search Console, Open Graph, Twitter Cards
+
+## 🔥 Features
+- 🌟 **Dynamic Portfolio Showcase**
+- 🚀 **Optimized for SEO** (Google-friendly metadata)
+- 📱 **Fully Responsive Design**
+- 🎨 **Dark Mode Support**
+- 🗺️ **Sitemap for Better Indexing**
+
+## 📂 Folder Structure
+```
+📦 portfolio
+ ┣ 📂 public
+ ┃ ┣ 📄 sitemap.xml
+ ┃ ┣ 📄 robots.txt
+ ┃ ┗ 📄 favicon.ico
+ ┣ 📂 components
+ ┣ 📂 pages
+ ┣ 📂 styles
+ ┣ 📜 next.config.js
+ ┣ 📜 package.json
+ ┣ 📜 README.md
+ ┗ 📜 tsconfig.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📢 Connect With Me
+- 🌎 [Portfolio](https://www.hardik-dev.tech/)
+- 🏆 [LinkedIn](https://linkedin.com/in/hardik-bhammar)
+- 💻 [GitHub](https://github.com/hardik-bhammar)
+- 🐦 [Twitter](https://twitter.com/hardikbhammar)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 🚀 Get Started
+```bash
+# Clone the repo
+git clone https://github.com/hardik-bhammar/portfolio.git
 
-## Learn More
+# Install dependencies
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# Run locally
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🛠 Deployment
+Deploy your portfolio easily using Vercel:
+```bash
+vercel deploy
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
+### 📌 License
+This project is open-source and available under the **MIT License**. Feel free to use and modify it!
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+💡 **Tip**: Keep improving your portfolio by updating your projects and optimizing for search engines!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
